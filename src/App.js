@@ -2,8 +2,10 @@ import { useState} from 'react'
 import { FaTrashAlt } from 'react-icons/fa';
 import Header from "./components/Header";
 import Tasks from "./components/Tasks";
+import AddTask from "./components/AddTask";
 
 function App() {
+  const [showAddTasks, setShowAddTasks] = useState(false)
   const [tasks, setTasks] = useState([
     {
         id: 1,
@@ -25,6 +27,15 @@ function App() {
     },
 ])
 
+//Add Task
+const addTask = (task) => {
+  const id = Math.floor(Math.random() *
+  1000) + 1
+  const newtask = {id, ...task}
+  setTasks([...tasks, newtask])
+  
+}
+
   //Delete Task
   const deleteTask = (id) => {
     setTasks(tasks.filter((task) => task.id !== id))
@@ -42,7 +53,10 @@ function App() {
 
   return (
     <div className='container'>
-      <Header/> 
+      <Header 
+        onAdd={() => setShowAddTasks(!showAddTasks)} showAdd={showAddTasks}
+      /> 
+      {showAddTasks && <AddTask onAdd = {addTask} />}
       {tasks.length > 0 ? <Tasks tasks={tasks}  onDelete={deleteTask} onToggle={toggleReminder} /> : 'No Tasks to Show'}
     </div>
   );
